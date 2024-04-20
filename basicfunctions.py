@@ -28,8 +28,10 @@ def scoredice(dicedict):
         
     if threeplus == True:
         for v in dicedict.values():
+            #Check for four of a kind
             if v==4:
                 categorydict['4ok'] = dicesum
+            #Check for full house
             if v==2:
                 categorydict['FH'] = 25
             categorydict['3ok'] = dicesum
@@ -55,5 +57,4 @@ def scoredice(dicedict):
         else:
             categorydict[str(i)] = upperscore
     
-    #print(categorydict)
     return(dicedict, categorydict)
