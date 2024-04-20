@@ -289,17 +289,22 @@ def strategy5(scoringdict):
         if t<2:
             continue
 
-        highestscore = 0
-        highestkey = ""
+        modevalue = 0
+        modekey = ""
         for k,v in categorydict.items():
-            if scoringdict[k] is None:
-                if v > highestscore:
-                    highestscore = v
-                    highestkey = k
-        if highestkey != "":
-            scoringdict[highestkey] = highestscore
+            if k != 'C':
+                if scoringdict[k] is None:
+                    if dicedict[int(k)] > modevalue:
+                        modevalue = dicedict[int(k)]
+                        modekey = k
+        if modekey != "":
+            scoringdict[modekey] = categorydict[modekey]
+            break
         else:
-            for k in ['1','2','3','4','5','6','C','3ok','4ok', 'FH', 'SS', 'LS', 'Y']:
+            if 'C' in categorydict and scoringdict['C'] is None:
+                scoringdict['C'] = categorydict['C']
+                break
+            for k in scoringdict.keys():
                 if scoringdict[k] is None:
                     scoringdict[k] = 0
                     break

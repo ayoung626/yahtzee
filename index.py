@@ -8,7 +8,7 @@ strategylist = [strat.strategy1, strat.strategy2, strat.strategy3, strat.strateg
 resultlist = []
 for s in strategylist:
     start_time = time.time()
-    random.seed = 1
+    random.seed = 12345
     finalscoreslist = []
     for _ in range(10000):
         scoringdict = {'Y':None,
@@ -37,8 +37,5 @@ for s in strategylist:
         finalscoreslist.append(totalscore)
     totaltime = "%s seconds" % round((time.time() - start_time), 2)
     resultlist.append((str(s).split(" ")[1], stat.mean(finalscoreslist), stat.stdev(finalscoreslist), totaltime))
-    #print(str(s).split(" ")[1])
-    #print(stat.mean(finalscoreslist))
-    #print(stat.stdev(finalscoreslist))
 for r in resultlist:
     print(r)
