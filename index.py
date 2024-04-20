@@ -1,14 +1,16 @@
 import statistics as stat
 import random
 import time
+import numpy as np
 import basicfunctions as bf
 import strategies as strat
+import scipy.stats as st
 
-strategylist = [strat.strategy1, strat.strategy2, strat.strategy3, strat.strategy4, strat.strategy5]
+strategylist = [strat.strategy1, strat.strategy2, strat.strategy3, strat.strategy4, strat.strategy5, strat.strategy6]
 resultlist = []
 for s in strategylist:
     start_time = time.time()
-    random.seed = 12345
+    random.seed = 123456
     finalscoreslist = []
     for _ in range(10000):
         scoringdict = {'Y':None,
@@ -36,6 +38,6 @@ for s in strategylist:
             totalscore+=35
         finalscoreslist.append(totalscore)
     totaltime = "%s seconds" % round((time.time() - start_time), 2)
-    resultlist.append((str(s).split(" ")[1], stat.mean(finalscoreslist), stat.stdev(finalscoreslist), totaltime))
+    resultlist.append((str(s).split(" ")[1], np.mean(finalscoreslist), st.t.interval(0.95, df=len(finalscoreslist)-1, loc=np.mean(finalscoreslist),  scale=st.sem(finalscoreslist)), stat.stdev(finalscoreslist), totaltime))
 for r in resultlist:
     print(r)
