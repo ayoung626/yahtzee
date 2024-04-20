@@ -1,5 +1,3 @@
-import simpy
-import statistics
 import statistics as stat
 import random
 import time
@@ -10,7 +8,7 @@ strategylist = [strat.strategy1, strat.strategy2, strat.strategy3, strat.strateg
 resultlist = []
 for s in strategylist:
     start_time = time.time()
-    random.seed = 12345
+    random.seed = 1
     finalscoreslist = []
     for _ in range(10000):
         scoringdict = {'Y':None,
