@@ -7,12 +7,12 @@ import basicfunctions as bf
 import strategies as strat
 
 start_time = time.time()
-strategylist = [strat.strategy1]
+strategylist = [strat.strategy1, strat.strategy2]
 resultlist = []
 for s in strategylist:
     random.seed = 12345
     finalscoreslist = []
-    for _ in range(1000):
+    for _ in range(10000):
         scoringdict = {'Y':None,
                        'FH':None,
                        'LS':None,
