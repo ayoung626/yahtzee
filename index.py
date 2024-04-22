@@ -15,8 +15,8 @@ for s in strategylist:
     start_time = time.time()
     random.seed = 123456
     finalscoreslist = []
-    #10,000 game replications
-    for _ in range(1000):
+    #Number of game replications
+    for _ in range(10000):
         scoringdict = {'Y':None,
                        'FH':None,
                        'LS':None,
@@ -48,9 +48,7 @@ for s in strategylist:
     totaltime = "%s seconds" % round((time.time() - start_time), 2)
     #Add the name of the strategy, the mean score, the 95% confidence interval, the standard deviation of the score, and the total time to a list for printing.
     scoresmean = np.mean(finalscoreslist)
-    print(scoresmean)
     scoresscale = st.sem(finalscoreslist)
-    print(scoresscale)
     confidenceinterval = st.t.interval(0.95, df=len(finalscoreslist)-1, loc=scoresmean,  scale=scoresscale)
     resultlist.append((str(s).split(" ")[1], scoresmean, confidenceinterval , stat.stdev(finalscoreslist), totaltime))
 plt.style.use('default')
@@ -65,5 +63,4 @@ ax.legend(loc='best', fontsize=11, framealpha=1, frameon = True)
 ax.set_xlabel('Average Score', fontsize = 12)
 ax.yaxis.set_major_formatter(plt.NullFormatter())
 fig.tight_layout()
-
 plt.show()
