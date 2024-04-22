@@ -5,6 +5,7 @@ import numpy as np
 import basicfunctions as bf
 import strategies as strat
 import scipy.stats as st
+from matplotlib import pyplot as plt
 
 #A list of the strategies from the strategies.py file.
 strategylist = [strat.primitive, strat.advanced, strat.advancedCustomOrder, strat.advancedModeUpper, strat.advancedModeUpperPlus]
@@ -15,7 +16,7 @@ for s in strategylist:
     random.seed = 123456
     finalscoreslist = []
     #10,000 game replications
-    for _ in range(10000):
+    for _ in range(1000):
         scoringdict = {'Y':None,
                        'FH':None,
                        'LS':None,
@@ -46,6 +47,23 @@ for s in strategylist:
         finalscoreslist.append(totalscore)
     totaltime = "%s seconds" % round((time.time() - start_time), 2)
     #Add the name of the strategy, the mean score, the 95% confidence interval, the standard deviation of the score, and the total time to a list for printing.
-    resultlist.append((str(s).split(" ")[1], np.mean(finalscoreslist), st.t.interval(0.95, df=len(finalscoreslist)-1, loc=np.mean(finalscoreslist),  scale=st.sem(finalscoreslist)), stat.stdev(finalscoreslist), totaltime))
-for r in resultlist:
-    print(r)
+    scoresmean = np.mean(finalscoreslist)
+    print(scoresmean)
+    scoresscale = st.sem(finalscoreslist)
+    print(scoresscale)
+    confidenceinterval = st.t.interval(0.95, df=len(finalscoreslist)-1, loc=scoresmean,  scale=scoresscale)
+    resultlist.append((str(s).split(" ")[1], scoresmean, confidenceinterval , stat.stdev(finalscoreslist), totaltime))
+plt.style.use('default')
+fig, ax = plt.subplots(figsize=(5,2))
+colorlist = ['r', 'y', 'g', 'b', 'm']
+for i, e in enumerate(resultlist):
+    print(e)
+    ax.errorbar(e[1], i, xerr=(e[2][1] - e[2][0]) / 2, fmt ='o', markersize=8, capsize=5, label = e[0], color = colorlist[i])
+    plt.text(e[1]-0.8, i+0.2, round(e[1], 2))
+ax.set_ylim(-0.6, 4.6)
+ax.legend(loc='best', fontsize=11, framealpha=1, frameon = True)
+ax.set_xlabel('Average Score', fontsize = 12)
+ax.yaxis.set_major_formatter(plt.NullFormatter())
+fig.tight_layout()
+
+plt.show()
