@@ -77,6 +77,7 @@ for s in strategylist:
 
 #Create a grouped bar chart showing the proportion of games that were able to score in each category
 strats = [r[0] for r in resultlist]
+#Check out this list comprehension inside a dictionary comprehension lol (Let me know if you get this granular haha)
 percentages = {key: [v for i in roundedlist for k, v in i.items() if k==key] for key in roundedlist[0].keys()}
 x = np.arange(len(strats))
 width = 0.075
