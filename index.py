@@ -1,8 +1,6 @@
-import statistics as stat
 import random
 import time
 import numpy as np
-import basicfunctions as bf
 import strategies as strat
 import scipy.stats as st
 from matplotlib import pyplot as plt
