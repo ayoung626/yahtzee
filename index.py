@@ -88,7 +88,7 @@ for attribute, measurement in percentages.items():
     rects = ax.bar(x + offset, measurement, width, label=attribute)
     ax.bar_label(rects, padding=3, fontsize = 6)
     multiplier += 1
-ax.set_ylabel('Percentage of the Time Scored')
+ax.set_ylabel('Proportion of the Time Scored')
 #ax.set_title('Strategies')
 ax.set_xticks(x + 6.5*width, strats)
 ax.legend(loc='upper left', ncols=3)
