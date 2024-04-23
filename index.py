@@ -13,10 +13,12 @@ resultlist = []
 roundedlist = []
 numberofreplications = 10000
 #Loop through the strategies, games, and turns
+#STRATEGY LEVEL
 for s in strategylist:
     start_time = time.time()
     random.seed = 123456
     finalscoreslist = []
+    #Create a dictionary to keep track of the percentage of games that score in each category
     percentagecategoriesdict = {'Y':0.,
                             'FH':0.,
                             'LS':0.,
@@ -30,7 +32,7 @@ for s in strategylist:
                             '4':0.,
                             '5':0.,
                             '6':0.}
-    #Number of game replications
+    #GAME LEVEL
     for _ in range(numberofreplications):
         scoringdict = {'Y':None,
                        'FH':None,
@@ -45,13 +47,15 @@ for s in strategylist:
                        '4':None,
                        '5':None,
                        '6':None}
-        #13 turns per game
+        #ROUND LEVEL
+        #13 rounds per game
         for i in range(13):
             s(scoringdict)
         totalscore = 0
         uppersectionscore = 0
         #Sum the scores for each category
         for k,v in scoringdict.items():
+            #Ensure that no category is left empty
             if v is None:
                 raise ValueError("The value of the key '{}' is None.".format(k))
             totalscore +=v
@@ -69,7 +73,7 @@ for s in strategylist:
     scoresmean = np.mean(finalscoreslist)
     scoresscale = st.sem(finalscoreslist)
     confidenceinterval = st.t.interval(0.95, df=len(finalscoreslist)-1, loc=scoresmean,  scale=scoresscale)
-    resultlist.append((str(s).split(" ")[1], scoresmean, confidenceinterval , stat.stdev(finalscoreslist), totaltime))
+    resultlist.append((str(s).split(" ")[1], scoresmean, confidenceinterval , "Time of the Run: "+ str(totaltime)))
     roundeddict = {key: round(percentagecategoriesdict[key], 2) for key in percentagecategoriesdict}
     roundedlist.append(roundeddict)
 
@@ -79,23 +83,24 @@ percentages = {key: [v for i in roundedlist for k, v in i.items() if k==key] for
 x = np.arange(len(strats))
 width = 0.075
 multiplier = 0
-fig, ax = plt.subplots(layout='constrained', figsize=(16,6))
+fig, ax = plt.subplots(layout='constrained', figsize=(14,6))
 for attribute, measurement in percentages.items():
     offset = width * multiplier
     rects = ax.bar(x + offset, measurement, width, label=attribute)
     ax.bar_label(rects, padding=3, fontsize = 6)
     multiplier += 1
 ax.set_ylabel('Percentage of the Time Scored')
-ax.set_title('Strategies')
+#ax.set_title('Strategies')
 ax.set_xticks(x + 6.5*width, strats)
 ax.legend(loc='upper left', ncols=3)
-ax.set_ylim(0, 1.5)
+ax.set_ylim(0, 1.25)
 plt.show()
 
 #Create another graphic for the score means and confidence intervals
 plt.style.use('default')
-fig, ax = plt.subplots(figsize=(16,6))
+fig, ax = plt.subplots(figsize=(14,6))
 colorlist = ['r', 'y', 'g', 'b', 'm']
+#Also print a tuple containing the results
 for i, e in enumerate(resultlist):
     print(e)
     ax.errorbar(e[1], i, xerr=(e[2][1] - e[2][0]) / 2, fmt ='o', markersize=8, capsize=5, label = e[0], color = colorlist[i])
