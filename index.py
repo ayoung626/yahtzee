@@ -10,13 +10,28 @@ from matplotlib import pyplot as plt
 #A list of the strategies from the strategies.py file.
 strategylist = [strat.primitive, strat.advanced, strat.advancedCustomOrder, strat.advancedModeUpper, strat.advancedModeUpperPlus]
 resultlist = []
+roundedlist = []
+numberofreplications = 10000
 #Loop through the strategies, games, and turns
 for s in strategylist:
     start_time = time.time()
     random.seed = 123456
     finalscoreslist = []
+    percentagecategoriesdict = {'Y':0.,
+                            'FH':0.,
+                            'LS':0.,
+                            'SS':0.,
+                            'C':0.,
+                            '4ok':0.,
+                            '3ok':0.,
+                            '1':0.,
+                            '2':0.,
+                            '3':0.,
+                            '4':0.,
+                            '5':0.,
+                            '6':0.}
     #Number of game replications
-    for _ in range(10000):
+    for _ in range(numberofreplications):
         scoringdict = {'Y':None,
                        'FH':None,
                        'LS':None,
@@ -37,7 +52,11 @@ for s in strategylist:
         uppersectionscore = 0
         #Sum the scores for each category
         for k,v in scoringdict.items():
+            if v is None:
+                raise ValueError("The value of the key '{}' is None.".format(k))
             totalscore +=v
+            if v != 0:
+                percentagecategoriesdict[k] = percentagecategoriesdict[k] + 1/numberofreplications
             #Also get the total score for the upper section categories
             if k in ['1','2','3','4','5','6']:
                 uppersectionscore += v
@@ -51,8 +70,31 @@ for s in strategylist:
     scoresscale = st.sem(finalscoreslist)
     confidenceinterval = st.t.interval(0.95, df=len(finalscoreslist)-1, loc=scoresmean,  scale=scoresscale)
     resultlist.append((str(s).split(" ")[1], scoresmean, confidenceinterval , stat.stdev(finalscoreslist), totaltime))
+    roundeddict = {key: round(percentagecategoriesdict[key], 2) for key in percentagecategoriesdict}
+    roundedlist.append(roundeddict)
+
+#Create a grouped bar chart showing the proportion of games that were able to score in each category
+strats = [r[0] for r in resultlist]
+percentages = {key: [v for i in roundedlist for k, v in i.items() if k==key] for key in roundedlist[0].keys()}
+x = np.arange(len(strats))
+width = 0.075
+multiplier = 0
+fig, ax = plt.subplots(layout='constrained', figsize=(16,6))
+for attribute, measurement in percentages.items():
+    offset = width * multiplier
+    rects = ax.bar(x + offset, measurement, width, label=attribute)
+    ax.bar_label(rects, padding=3, fontsize = 6)
+    multiplier += 1
+ax.set_ylabel('Percentage of the Time Scored')
+ax.set_title('Strategies')
+ax.set_xticks(x + 6.5*width, strats)
+ax.legend(loc='upper left', ncols=3)
+ax.set_ylim(0, 1.5)
+plt.show()
+
+#Create another graphic for the score means and confidence intervals
 plt.style.use('default')
-fig, ax = plt.subplots(figsize=(5,2))
+fig, ax = plt.subplots(figsize=(16,6))
 colorlist = ['r', 'y', 'g', 'b', 'm']
 for i, e in enumerate(resultlist):
     print(e)

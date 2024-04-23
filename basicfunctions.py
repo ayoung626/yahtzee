@@ -40,12 +40,13 @@ def scoredice(dicedict):
         if (dicedict[1] ==1 and dicedict[2] == 1 and dicedict[3] == 1 and dicedict[4] == 1 and dicedict[5] == 1) or (dicedict[2] == 1 and dicedict[3] == 1 and dicedict[4] == 1 and dicedict[5] == 1 and dicedict[6]==1):
             categorydict['LS'] = 40
     except:
-        try:
-            #Check for small straights
-            if (dicedict[1] >=1 and dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1) or (dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1) or (dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1 and dicedict[6] >=1):
-                categorydict['SS'] = 30
-        except:
-            pass
+        pass
+    try:
+        #Check for small straights
+        if (dicedict[1] >=1 and dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1) or (dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1) or (dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1 and dicedict[6] >=1):
+            categorydict['SS'] = 30
+    except:
+        pass
     
     categorydict['C'] = dicesum
     
