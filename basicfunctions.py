@@ -1,7 +1,9 @@
 import random
 from collections import Counter
 
-def diceroll(rolllist = []):
+def diceroll(rolllist=None):
+    if rolllist is None:
+        rolllist = []
     keeplist = rolllist.copy()
     dicenum = 5 - len(keeplist)
     for i in range(dicenum):
@@ -35,18 +37,12 @@ def scoredice(dicedict):
             if v==2:
                 categorydict['FH'] = 25
             categorydict['3ok'] = dicesum
-    try:
-        #Check for large straights
-        if (dicedict[1] ==1 and dicedict[2] == 1 and dicedict[3] == 1 and dicedict[4] == 1 and dicedict[5] == 1) or (dicedict[2] == 1 and dicedict[3] == 1 and dicedict[4] == 1 and dicedict[5] == 1 and dicedict[6]==1):
-            categorydict['LS'] = 40
-    except:
-        pass
-    try:
-        #Check for small straights
-        if (dicedict[1] >=1 and dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1) or (dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1) or (dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1 and dicedict[6] >=1):
-            categorydict['SS'] = 30
-    except:
-        pass
+    #Check for large straights
+    if (dicedict[1] ==1 and dicedict[2] == 1 and dicedict[3] == 1 and dicedict[4] == 1 and dicedict[5] == 1) or (dicedict[2] == 1 and dicedict[3] == 1 and dicedict[4] == 1 and dicedict[5] == 1 and dicedict[6]==1):
+        categorydict['LS'] = 40
+    #Check for small straights
+    if (dicedict[1] >=1 and dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1) or (dicedict[2] >= 1 and dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1) or (dicedict[3] >= 1 and dicedict[4] >= 1 and dicedict[5] >= 1 and dicedict[6] >=1):
+        categorydict['SS'] = 30
     
     categorydict['C'] = dicesum
     

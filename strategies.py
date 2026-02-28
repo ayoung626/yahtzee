@@ -294,11 +294,14 @@ def advancedModeUpperPlus(scoringdict):
 
         if '4ok' in categorydict and scoringdict['4ok'] is None:
             if t == 2 or categorydict['4ok'] > 100:
+                scored_upper = False
                 for x in [4,5,6]:
                     if dicedict[x] >= 4 and scoringdict[str(x)] is None:
                         scoringdict[str(x)] = categorydict[str(x)]
+                        scored_upper = True
                         break
-                scoringdict['4ok'] = categorydict['4ok']
+                if not scored_upper:
+                    scoringdict['4ok'] = categorydict['4ok']
                 break
             for k,v in dicedict.items():
                 if v == 4:
@@ -307,11 +310,14 @@ def advancedModeUpperPlus(scoringdict):
 
         if '3ok' in categorydict and scoringdict['3ok'] is None:
             if t == 2 or categorydict['3ok'] > 100:
+                scored_upper = False
                 for x in [4,5,6]:
                     if dicedict[x] >= 3 and scoringdict[str(x)] is None:
                         scoringdict[str(x)] = categorydict[str(x)]
+                        scored_upper = True
                         break
-                scoringdict['3ok'] = categorydict['3ok']
+                if not scored_upper:
+                    scoringdict['3ok'] = categorydict['3ok']
                 break
             for k,v in dicedict.items():
                 if v == 3:

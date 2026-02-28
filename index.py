@@ -14,7 +14,7 @@ numberofreplications = 10000
 #STRATEGY LEVEL
 for s in strategylist:
     start_time = time.time()
-    random.seed = 123456
+    random.seed(123456)
     finalscoreslist = []
     #Create a dictionary to keep track of the percentage of games that score in each category
     percentagecategoriesdict = {'Y':0.,
@@ -101,7 +101,7 @@ fig, ax = plt.subplots(figsize=(14,6))
 colorlist = ['r', 'y', 'g', 'b', 'm']
 #Also print a tuple containing the results
 for i, e in enumerate(resultlist):
-    print(e)
+    print(f"Strategy: {e[0]} | Mean Score: {e[1]:.2f} | {e[3]}")
     ax.errorbar(e[1], i, xerr=(e[2][1] - e[2][0]) / 2, fmt ='o', markersize=8, capsize=5, label = e[0], color = colorlist[i])
     plt.text(e[1]-0.8, i+0.2, round(e[1], 2))
 ax.set_ylim(-0.6, 4.6)
